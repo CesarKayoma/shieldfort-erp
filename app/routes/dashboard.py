@@ -1,21 +1,18 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 bp = Blueprint("dashboard", __name__)
 
-
 @bp.route("/")
 def index():
-    return """
-    <html>
-        <head>
-            <title>Dashboard</title>
-        </head>
-        <body>
-            <h1>ShieldFort - Home</h1>
-            <p>Serviços Realizados 20</p>
-            <p>Valor Faturado R$ 3.697,50</p>
-            <p>Total Clientes 16</p>
-            <p>Vendas Mês Atual 18</p>
-        </body>
-    </html>
-    """
+    return render_template("dashboard/index.html",
+        kpis={
+            "instalacoes_mes": 20,
+            "faturamento_mes": "3.697,50",
+            "total_clientes": 16,
+            "vendas_mes": 18,
+        },
+        chart_instalacoes=[],
+        proximos_servicos=[],
+        ultimos_servicos=[],
+        hoje="junho 2025"
+    )

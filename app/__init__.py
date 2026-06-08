@@ -20,7 +20,8 @@ def create_app(config_name="default"):
     from app.routes.recorrentes import bp as recorrentes_bp
     from app.routes.starlink import bp as starlink_bp
     from app.routes.gastos import bp as gastos_bp
-
+    from app.routes.auth import bp as auth_bp
+    
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(clientes_bp, url_prefix="/clientes")
     app.register_blueprint(orcamentos_bp, url_prefix="/orcamentos")
@@ -29,5 +30,6 @@ def create_app(config_name="default"):
     app.register_blueprint(recorrentes_bp, url_prefix="/recorrentes")
     app.register_blueprint(starlink_bp, url_prefix="/starlink")
     app.register_blueprint(gastos_bp, url_prefix="/gastos")
+    app.register_blueprint(auth_bp)
 
     return app
