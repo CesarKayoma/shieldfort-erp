@@ -39,3 +39,23 @@ Starlink
 há muitas starlinks, o objetivo é que se tenha um controle delas, no sentido de saber quem é o dono dela, qual a situação do plano, se ela está ativa ou não, e se o dono deve algo da starlink para a gente;
 
 """
+
+
+Entidades:
+clientes
+
+produtos (produtos e serviços)
+categorias_produto
+unidades_medida
+
+orcamentos
+orcamento_itens
+
+servicos
+servico_pagamentos
+
+contratos
+contrato_cobrancas
+cobranca_pagamentos
+
+custos
