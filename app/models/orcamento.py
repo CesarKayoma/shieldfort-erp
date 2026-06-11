@@ -20,7 +20,6 @@ class Orcamento(BaseModel):
     ativo = db.Column(db.Boolean, default=True)
     itens = db.relationship("ItemOrcamento", backref="orcamento", lazy=True, cascade="all, delete-orphan")
     venda = db.relationship("Venda", backref="orcamento", uselist=False)
-    cliente = db.relationship("Cliente",backref="orcamentos")
 
     @property
     def total(self):    
@@ -34,8 +33,8 @@ class ItemOrcamento(BaseModel):
     __tablename__ = "itens_orcamento"
 
     id = db.Column(db.Integer, primary_key=True)
-    orcamento_id = db.Column(db.Integer, db.ForeignKey("orcamentos.id"), unique=True)
-    categoria_id = db.Column(db.Integer, db.ForeignKey("categorias.id"), nullable=True, index=True)
+    orcamento_id = db.Column(db.Integer, db.ForeignKey("orcamentos.id"))
+    categoria_id = db.Column(db.Integer, db.ForeignKey("categorias_produtos.id"), nullable=True, index=True)
     produto_id = db.Column(db.Integer, db.ForeignKey("produtos.id"), nullable=True, index=True)
     descricao = db.Column(db.String(255), nullable=False)
     quantidade = db.Column(db.Float, nullable=False, default=1)
