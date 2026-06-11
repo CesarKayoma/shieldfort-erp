@@ -33,8 +33,8 @@ class ItemOrcamento(BaseModel):
     __tablename__ = "itens_orcamento"
 
     orcamento_id = db.Column(db.Integer, db.ForeignKey("orcamentos.id"), nullable=False)
-    categoria_id = db.Column(db.Integer, db.ForeignKey("categorias_produtos.id"), nullable=True, index=True)
-    produto_id = db.Column(db.Integer, db.ForeignKey("produtos.id"), nullable=True, index=True)
+    categoria_id = db.Column(db.Integer, db.ForeignKey("categorias_produtos.id"), nullable=False, index=True)
+    produto_id = db.Column(db.Integer, db.ForeignKey("produtos.id"), nullable=False, index=True)
     descricao = db.Column(db.String(255), nullable=False)
     quantidade = db.Column(db.Numeric(10,2),nullable=False,default=Decimal("1.00"))
     preco_unitario = db.Column(db.Numeric(10,2), nullable=False, default=Decimal("0.00"))
