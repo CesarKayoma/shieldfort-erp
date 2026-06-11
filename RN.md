@@ -41,21 +41,26 @@ há muitas starlinks, o objetivo é que se tenha um controle delas, no sentido d
 """
 
 
-Entidades:
-clientes
+5. BaseModel x db.Model
 
-produtos (produtos e serviços)
-categorias_produto
-unidades_medida
+Você mistura:
 
-orcamentos
-orcamento_itens
+class Orcamento(BaseModel):
 
-servicos
-servico_pagamentos
+e
 
-contratos
-contrato_cobrancas
-cobranca_pagamentos
+class ItemOrcamento(db.Model):
 
-custos
+Isso pode ser inconsistente.
+
+Se o BaseModel possui:
+
+created_at
+updated_at
+id
+
+Então o ideal seria:
+
+class ItemOrcamento(BaseModel):
+
+para manter o padrão.
