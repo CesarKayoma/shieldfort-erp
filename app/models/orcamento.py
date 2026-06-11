@@ -20,7 +20,6 @@ class Orcamento(BaseModel):
     status = db.Column(db.Enum(StatusOrcamento, name="status_orcamento"), nullable=False, default=StatusOrcamento.RASCUNHO)
     ativo = db.Column(db.Boolean, default=True)
     itens = db.relationship("ItemOrcamento", backref="orcamento", lazy=True, cascade="all, delete-orphan")
-    venda = db.relationship("Venda", backref="orcamento", uselist=False)
 
     @property
     def total(self):    
@@ -40,7 +39,7 @@ class ItemOrcamento(BaseModel):
     quantidade = db.Column(db.Numeric(10,2),nullable=False,default=Decimal("1.00"))
     preco_unitario = db.Column(db.Numeric(10,2), nullable=False, default=Decimal("0.00"))
 
-    categoria = db.relationship("Categoria")
+    categoria = db.relationship("CategoriaProduto")
 
     @property
     def subtotal(self):
