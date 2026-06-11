@@ -39,3 +39,28 @@ Starlink
 há muitas starlinks, o objetivo é que se tenha um controle delas, no sentido de saber quem é o dono dela, qual a situação do plano, se ela está ativa ou não, e se o dono deve algo da starlink para a gente;
 
 """
+
+
+5. BaseModel x db.Model
+
+Você mistura:
+
+class Orcamento(BaseModel):
+
+e
+
+class ItemOrcamento(db.Model):
+
+Isso pode ser inconsistente.
+
+Se o BaseModel possui:
+
+created_at
+updated_at
+id
+
+Então o ideal seria:
+
+class ItemOrcamento(BaseModel):
+
+para manter o padrão.
