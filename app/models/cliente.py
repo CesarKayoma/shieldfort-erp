@@ -14,9 +14,6 @@ class Cliente(BaseModel):
     endereco = db.Column(db.String(255), nullable=True)
     ativo = db.Column(db.Boolean, default=True)
     orcamentos = db.relationship("Orcamento", backref="cliente", lazy=True)
-    vendas = db.relationship("Venda", backref="cliente", lazy=True)
-    servicos_recorrentes = db.relationship("ServicoRecorrente", backref="cliente", lazy=True)
-    starlink = db.relationship("ClienteStarlink", backref="cliente", uselist=False)
 
     def __repr__(self):
         return f"<Cliente {self.nome}>"
