@@ -14,55 +14,55 @@
 <!-- KPI Cards -->
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
-  <div class="animate-fade-up delay-1 bg-navy-900 border border-navy-700 rounded-xl p-4 hover:border-navy-600 transition-colors">
+  <div class="animate-fade-up delay-1 bg-surface-900 border border-surface-700 rounded-xl p-4 hover:border-surface-600 transition-colors">
     <div class="flex items-start justify-between mb-3">
       <p class="text-xs text-slate-500">Instalações / mês</p>
-      <div class="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
-        <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
+        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>
         </svg>
       </div>
     </div>
-    <p class="text-2xl font-display font-700 text-white">{{ kpis.instalacoes_mes | default('—') }}</p>
+    <p class="text-2xl font-display font-700 text-slate-900">{{ kpis.instalacoes_mes | default('—') }}</p>
     <p class="text-xs text-slate-500 mt-1">este mês</p>
   </div>
 
-  <div class="animate-fade-up delay-2 bg-navy-900 border border-navy-700 rounded-xl p-4 hover:border-navy-600 transition-colors">
+  <div class="animate-fade-up delay-2 bg-surface-900 border border-surface-700 rounded-xl p-4 hover:border-surface-600 transition-colors">
     <div class="flex items-start justify-between mb-3">
       <p class="text-xs text-slate-500">Faturamento</p>
-      <div class="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
-        <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
+        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
         </svg>
       </div>
     </div>
-    <p class="text-2xl font-display font-700 text-white">R$ {{ kpis.faturamento_mes | default('—') }}</p>
+    <p class="text-2xl font-display font-700 text-slate-900">R$ {{ kpis.faturamento_mes | default('—') }}</p>
     <p class="text-xs text-slate-500 mt-1">este mês</p>
   </div>
 
-  <div class="animate-fade-up delay-3 bg-navy-900 border border-navy-700 rounded-xl p-4 hover:border-navy-600 transition-colors">
+  <div class="animate-fade-up delay-3 bg-surface-900 border border-surface-700 rounded-xl p-4 hover:border-surface-600 transition-colors">
     <div class="flex items-start justify-between mb-3">
       <p class="text-xs text-slate-500">Clientes</p>
-      <div class="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
-        <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
+        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
         </svg>
       </div>
     </div>
-    <p class="text-2xl font-display font-700 text-white">{{ kpis.total_clientes | default('—') }}</p>
+    <p class="text-2xl font-display font-700 text-slate-900">{{ kpis.total_clientes | default('—') }}</p>
     <p class="text-xs text-slate-500 mt-1">cadastrados</p>
   </div>
 
-  <div class="animate-fade-up delay-4 bg-navy-900 border border-navy-700 rounded-xl p-4 hover:border-navy-600 transition-colors">
+  <div class="animate-fade-up delay-4 bg-surface-900 border border-surface-700 rounded-xl p-4 hover:border-surface-600 transition-colors">
     <div class="flex items-start justify-between mb-3">
       <p class="text-xs text-slate-500">Vendas / mês</p>
-      <div class="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
-        <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
+        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
       </div>
     </div>
-    <p class="text-2xl font-display font-700 text-white">{{ kpis.vendas_mes | default('—') }}</p>
+    <p class="text-2xl font-display font-700 text-slate-900">{{ kpis.vendas_mes | default('—') }}</p>
     <p class="text-xs text-slate-500 mt-1">este mês</p>
   </div>
 
@@ -72,24 +72,24 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
 
   <!-- Bar chart -->
-  <div class="lg:col-span-2 bg-navy-900 border border-navy-700 rounded-xl p-5">
-    <h2 class="text-sm font-500 text-white mb-4">Instalações por mês</h2>
+  <div class="lg:col-span-2 bg-surface-900 border border-surface-700 rounded-xl p-5">
+    <h2 class="text-sm font-500 text-slate-900 mb-4">Instalações por mês</h2>
     <div class="flex items-end gap-2 h-32">
       {% for item in chart_instalacoes | default([]) %}
         {% set max_val = chart_instalacoes | map(attribute='valor') | max | default(1) %}
         {% set height = ((item.valor / max_val) * 100) | int %}
         <div class="flex-1 flex flex-col items-center gap-1 group cursor-pointer">
-          <span class="text-xs text-slate-500 group-hover:text-violet-400 transition-colors opacity-0 group-hover:opacity-100">{{ item.valor }}</span>
-          <div class="w-full rounded-t-sm transition-all group-hover:bg-violet-500"
-               style="height: {{ height }}%; background: #7c3aed; opacity: 0.7;"></div>
+          <span class="text-xs text-slate-500 group-hover:text-brand-600 transition-colors opacity-0 group-hover:opacity-100">{{ item.valor }}</span>
+          <div class="w-full rounded-t-sm transition-all group-hover:bg-brand-500"
+               style="height: {{ height }}%; background: #115D91; opacity: 0.7;"></div>
           <span class="text-xs text-slate-500">{{ item.mes }}</span>
         </div>
       {% else %}
         {% for i in range(8) %}
           {% set heights = [40, 65, 30, 80, 55, 70, 45, 90] %}
           <div class="flex-1 flex flex-col items-center gap-1">
-            <div class="w-full rounded-t-sm" style="height: {{ heights[i] }}%; background: #7c3aed; opacity: 0.6;"></div>
-            <span class="text-xs text-slate-600">—</span>
+            <div class="w-full rounded-t-sm" style="height: {{ heights[i] }}%; background: #115D91; opacity: 0.6;"></div>
+            <span class="text-xs text-slate-400">—</span>
           </div>
         {% endfor %}
       {% endfor %}
@@ -97,51 +97,51 @@
   </div>
 
   <!-- Serviços próximos -->
-  <div class="bg-navy-900 border border-navy-700 rounded-xl p-5">
-    <h2 class="text-sm font-500 text-white mb-4">Serviços próximos</h2>
+  <div class="bg-surface-900 border border-surface-700 rounded-xl p-5">
+    <h2 class="text-sm font-500 text-slate-900 mb-4">Serviços próximos</h2>
     <div class="space-y-3">
         <div class="flex items-start gap-3">
-          <div class="w-1.5 h-1.5 rounded-full bg-violet-500 mt-1.5 shrink-0"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-brand-500 mt-1.5 shrink-0"></div>
           <div class="min-w-0">
-            <p class="text-xs text-white truncate"></p>
+            <p class="text-xs text-slate-900 truncate"></p>
             <p class="text-xs text-slate-500"></p>
           </div>
         </div>
-        <p class="text-xs text-slate-600">Nenhum serviço agendado.</p>
+        <p class="text-xs text-slate-400">Nenhum serviço agendado.</p>
     </div>
   </div>
 
 </div>
 
 <!-- Últimos serviços -->
-<div class="bg-navy-900 border border-navy-700 rounded-xl">
-  <div class="flex items-center justify-between px-5 py-4 border-b border-navy-700">
-    <h2 class="text-sm font-500 text-white">Últimos Serviços</h2>
-    <a href="" class="text-xs text-violet-400 hover:text-violet-300 transition-colors">Ver todos →</a>
+<div class="bg-surface-900 border border-surface-700 rounded-xl">
+  <div class="flex items-center justify-between px-5 py-4 border-b border-surface-700">
+    <h2 class="text-sm font-500 text-slate-900">Últimos Serviços</h2>
+    <a href="" class="text-xs text-brand-600 hover:text-brand-700 transition-colors">Ver todos →</a>
   </div>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
       <thead>
-        <tr class="border-b border-navy-700">
+        <tr class="border-b border-surface-700">
           <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Cliente</th>
           <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Tipo</th>
           <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Data</th>
           <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Status</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-navy-700">
+      <tbody class="divide-y divide-surface-700">
         {% for s in ultimos_servicos | default([]) %}
           <tr class="transition-colors cursor-pointer" onclick="window.location=''">
-            <td class="px-5 py-3 text-white text-xs">{{ s.cliente }}</td>
-            <td class="px-5 py-3 text-slate-400 text-xs">{{ s.tipo }}</td>
-            <td class="px-5 py-3 text-slate-400 text-xs">{{ s.data }}</td>
+            <td class="px-5 py-3 text-slate-900 text-xs">{{ s.cliente }}</td>
+            <td class="px-5 py-3 text-slate-500 text-xs">{{ s.tipo }}</td>
+            <td class="px-5 py-3 text-slate-500 text-xs">{{ s.data }}</td>
             <td class="px-5 py-3">
               <span class="badge-{{ s.status | lower }} text-xs px-2 py-0.5 rounded-full font-500">{{ s.status }}</span>
             </td>
           </tr>
         {% else %}
           <tr>
-            <td colspan="4" class="px-5 py-8 text-center text-xs text-slate-600">Nenhum serviço registrado.</td>
+            <td colspan="4" class="px-5 py-8 text-center text-xs text-slate-400">Nenhum serviço registrado.</td>
           </tr>
         {% endfor %}
       </tbody>

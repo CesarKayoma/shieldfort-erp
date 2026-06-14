@@ -16,8 +16,8 @@
             display: ['Syne', 'sans-serif'],
           },
           colors: {
-            navy: { 950: '#0b0f1a', 900: '#0f1525', 800: '#161d35', 700: '#1e2847' },
-            violet: { 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed' },
+            surface: { 950: '#F7F9FC', 900: '#FFFFFF', 800: '#F1F5F9', 700: '#E2E8F0' },
+            brand: { 100: '#D2E6F4', 500: '#1C77AD', 600: '#115D91', 700: '#0D4870' },
           }
         }
       }
@@ -35,28 +35,28 @@
     .delay-2 { animation-delay: 0.2s; }
   </style>
 </head>
-<body class="h-full bg-navy-950 flex items-center justify-center p-4">
+<body class="h-full bg-surface-950 flex items-center justify-center p-4">
 
   <!-- Background subtle grid -->
-  <div class="fixed inset-0 opacity-5" style="background-image: linear-gradient(rgba(139,92,246,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.3) 1px, transparent 1px); background-size: 40px 40px;"></div>
+  <div class="fixed inset-0 opacity-5" style="background-image: linear-gradient(rgba(17,93,145,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(17,93,145,0.4) 1px, transparent 1px); background-size: 40px 40px;"></div>
 
   <div class="relative w-full max-w-sm animate-fade-up">
 
     <!-- Card -->
-    <div class="bg-navy-900 border border-navy-700 rounded-2xl overflow-hidden shadow-2xl">
+    <div class="bg-surface-900 border border-surface-700 rounded-2xl overflow-hidden shadow-2xl">
 
       <!-- Top: logo + brand -->
       <div class="flex items-stretch">
         <!-- Form side -->
         <div class="flex-1 p-8">
-          <h1 class="font-display text-xl font-700 text-white mb-1">Login</h1>
+          <h1 class="font-display text-xl font-700 text-slate-900 mb-1">Login</h1>
           <p class="text-xs text-slate-500 mb-6">Acesse o painel da empresa</p>
 
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% for category, message in messages %}
               <div class="mb-4 px-3 py-2.5 rounded-lg text-xs
-                {% if category == 'danger' %}bg-red-900/40 border border-red-700 text-red-300
-                {% else %}bg-violet-900/40 border border-violet-700 text-violet-300{% endif %}">
+                {% if category == 'danger' %}bg-red-50 border border-red-200 text-red-700
+                {% else %}bg-brand-100 border border-brand-100 text-brand-700{% endif %}">
                 {{ message }}
               </div>
             {% endfor %}
@@ -64,24 +64,24 @@
           <form method="POST" action="{{ url_for('auth.login') }}" class="space-y-4">
             {{ form.hidden_tag() }}
             <div>
-              <label class="block text-xs font-500 text-slate-400 mb-1.5">E-mail</label>
+              <label class="block text-xs font-500 text-slate-500 mb-1.5">E-mail</label>
               <input type="email" name="email" required
-                class="w-full bg-navy-800 border border-navy-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600
-                       focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500/30 transition-all"
+                class="w-full bg-surface-800 border border-surface-700 rounded-lg px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400
+                       focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all"
                 placeholder="seu@email.com" />
             </div>
 
             <div>
-              <label class="block text-xs font-500 text-slate-400 mb-1.5">Senha</label>
+              <label class="block text-xs font-500 text-slate-500 mb-1.5">Senha</label>
               <input type="password" name="senha" required
-                class="w-full bg-navy-800 border border-navy-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600
-                       focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500/30 transition-all"
+                class="w-full bg-surface-800 border border-surface-700 rounded-lg px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400
+                       focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all"
                 placeholder="••••••••" />
             </div>
 
             <button type="submit"
-              class="w-full mt-2 bg-violet-600 hover:bg-violet-500 active:bg-violet-700 text-white text-sm font-500
-                     py-2.5 rounded-lg transition-colors shadow-lg shadow-violet-900/40">
+              class="w-full mt-2 bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white text-sm font-500
+                     py-2.5 rounded-lg transition-colors shadow-lg shadow-brand-600/20">
               Entrar
             </button>
 
@@ -89,8 +89,8 @@
         </div>
 
         <!-- Brand side -->
-        <div class="w-28 bg-navy-800 border-l border-navy-700 flex flex-col items-center justify-center gap-3 p-4">
-          <div class="w-12 h-12 rounded-xl bg-violet-600 flex items-center justify-center shadow-lg shadow-violet-900/50">
+        <div class="w-28 bg-brand-600 flex flex-col items-center justify-center gap-3 p-4">
+          <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 003 10c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.249-8.25-3.286z"/>
             </svg>
@@ -101,7 +101,7 @@
 
     </div>
 
-    <p class="text-center text-xs text-slate-600 mt-4">Sistema de Gestão Comercial</p>
+    <p class="text-center text-xs text-slate-500 mt-4">Sistema de Gestão Comercial</p>
   </div>
 
 </body>

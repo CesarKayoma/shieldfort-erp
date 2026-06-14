@@ -7,24 +7,24 @@
 
 {% block topbar_actions %}
   <a href="{{ url_for('clientes.index') }}"
-     class="flex items-center gap-1.5 text-slate-400 hover:text-white text-xs font-500 px-3 py-2 rounded-lg border border-navy-700 hover:border-navy-600 transition-colors">
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
     ← Voltar
   </a>
   <a href="{{ url_for('clientes.editar', id=cliente.id) }}"
-     class="flex items-center gap-1.5 bg-violet-600 hover:bg-violet-500 text-white text-xs font-500 px-3 py-2 rounded-lg transition-colors">
+     class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-3 py-2 rounded-lg transition-colors">
     Editar
   </a>
 {% endblock %}
 
 {% block content %}
-<div class="max-w-2xl bg-navy-900 border border-navy-700 rounded-xl p-6 space-y-6">
+<div class="max-w-2xl bg-surface-900 border border-surface-700 rounded-xl p-6 space-y-6">
 
   <div class="flex items-center gap-4">
-    <div class="w-12 h-12 rounded-full bg-violet-700 flex items-center justify-center text-lg font-600 text-white shrink-0">
+    <div class="w-12 h-12 rounded-full bg-brand-700 flex items-center justify-center text-lg font-600 text-white shrink-0">
       {{ cliente.nome[0].upper() }}
     </div>
     <div>
-      <h2 class="text-white font-600">{{ cliente.nome }}</h2>
+      <h2 class="text-slate-900 font-600">{{ cliente.nome }}</h2>
       <span class="badge-{{ 'ativo' if cliente.ativo else 'inativo' }} text-xs px-2 py-0.5 rounded-full font-500">
         {{ 'Ativo' if cliente.ativo else 'Inativo' }}
       </span>
@@ -34,31 +34,31 @@
   <dl class="grid grid-cols-2 gap-4 text-sm">
     <div>
       <dt class="text-xs text-slate-500 mb-1">Tipo</dt>
-      <dd class="text-slate-300">{{ 'Pessoa Física' if cliente.tipo == 'PF' else 'Pessoa Jurídica' }}</dd>
+      <dd class="text-slate-700">{{ 'Pessoa Física' if cliente.tipo == 'PF' else 'Pessoa Jurídica' }}</dd>
     </div>
     <div>
       <dt class="text-xs text-slate-500 mb-1">CPF / CNPJ</dt>
-      <dd class="text-slate-300 font-mono">{{ cliente.cpf_cnpj or '—' }}</dd>
+      <dd class="text-slate-700 font-mono">{{ cliente.cpf_cnpj or '—' }}</dd>
     </div>
     <div>
       <dt class="text-xs text-slate-500 mb-1">Telefone</dt>
-      <dd class="text-slate-300">{{ cliente.telefone or '—' }}</dd>
+      <dd class="text-slate-700">{{ cliente.telefone or '—' }}</dd>
     </div>
     <div>
       <dt class="text-xs text-slate-500 mb-1">E-mail</dt>
-      <dd class="text-slate-300">{{ cliente.email or '—' }}</dd>
+      <dd class="text-slate-700">{{ cliente.email or '—' }}</dd>
     </div>
     <div class="col-span-2">
       <dt class="text-xs text-slate-500 mb-1">Endereço</dt>
-      <dd class="text-slate-300">{{ cliente.endereco or '—' }}</dd>
+      <dd class="text-slate-700">{{ cliente.endereco or '—' }}</dd>
     </div>
   </dl>
 
-  <div class="border-t border-navy-700 pt-4 flex items-center justify-between">
+  <div class="border-t border-surface-700 pt-4 flex items-center justify-between">
     <p class="text-xs text-slate-500">{{ cliente.orcamentos|length }} orçamento(s) vinculado(s)</p>
     <form method="POST" action="{{ url_for('clientes.excluir', id=cliente.id) }}"
           onsubmit="return confirm('Tem certeza que deseja excluir este cliente?');">
-      <button type="submit" class="text-xs text-red-400 hover:text-red-300 transition-colors">Excluir cliente</button>
+      <button type="submit" class="text-xs text-red-600 hover:text-red-700 transition-colors">Excluir cliente</button>
     </form>
   </div>
 
