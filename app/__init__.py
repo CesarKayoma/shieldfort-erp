@@ -1,17 +1,23 @@
 from flask import Flask
 from config import config
-from app.extensions import db, migrate
-
+from app.extensions import db, migrate, login_manager
 
 def create_app(config_name="default"):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
 
-    # Extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    login_manager.init_app(app)
 
-    # Blueprints
+    # user_loader — Flask-Login usa isso pra recarregar o usuário da sessão
+    from app.models.user import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    # Blueprints (igual ao que você já tem)
     from app.routes.dashboard import bp as dashboard_bp
     from app.routes.clientes import bp as clientes_bp
     from app.routes.orcamentos import bp as orcamentos_bp
@@ -21,7 +27,7 @@ def create_app(config_name="default"):
     from app.routes.starlink import bp as starlink_bp
     from app.routes.gastos import bp as gastos_bp
     from app.routes.auth import bp as auth_bp
-    
+
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(clientes_bp, url_prefix="/clientes")
     app.register_blueprint(orcamentos_bp, url_prefix="/orcamentos")

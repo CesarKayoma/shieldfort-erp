@@ -64,3 +64,12 @@ Então o ideal seria:
 class ItemOrcamento(BaseModel):
 
 para manter o padrão.
+
+"""
+Entidades:
+cliente
+orcamento
+produto
+
+
+"""

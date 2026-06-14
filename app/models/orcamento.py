@@ -17,7 +17,15 @@ class Orcamento(BaseModel):
 
     
     cliente_id = db.Column(db.Integer, db.ForeignKey("clientes.id"), nullable=False, index=True)
-    status = db.Column(db.Enum(StatusOrcamento, name="status_orcamento"), nullable=False, default=StatusOrcamento.RASCUNHO)
+    status = db.Column(
+        db.Enum(
+            StatusOrcamento,
+            name="status_orcamento",
+            values_callable=lambda obj: [e.value for e in obj],
+        ),
+    nullable=False,
+    default=StatusOrcamento.RASCUNHO,
+)
     ativo = db.Column(db.Boolean, default=True)
     itens = db.relationship("ItemOrcamento", backref="orcamento", lazy=True, cascade="all, delete-orphan")
 
