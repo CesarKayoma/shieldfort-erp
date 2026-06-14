@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Orçamento #{{ orcamento.id }} — Shieldfort{% endblock %}
+
+{% block page_title %}Orçamento #{{ orcamento.id }}{% endblock %}
+{% block page_subtitle %}{{ orcamento.cliente.nome }}{% endblock %}
+
+{% block topbar_actions %}
+  <a href="{{ url_for('orcamentos.index') }}"
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
+    ← Voltar
+  </a>
+  {% if orcamento.status.value == 'rascunho' %}
+    <a href="{{ url_for('orcamentos.editar', id=orcamento.id) }}"
+       class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-3 py-2 rounded-lg transition-colors">
+      Editar
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl space-y-6">
+
+  <div class="bg-surface-900 border border-surface-700 rounded-xl p-6">
+    <dl class="grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Cliente</dt>
+        <dd class="text-slate-700">{{ orcamento.cliente.nome }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Status</dt>
+        <dd>
+          <span class="badge-{{ orcamento.status.value }} text-xs px-2 py-0.5 rounded-full font-500">
+            {{ orcamento.status.value|capitalize }}
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Ativo</dt>
+        <dd class="text-slate-700">{{ "Sim" if orcamento.ativo else "Não" }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Criado em</dt>
+        <dd class="text-slate-700">{{ orcamento.criado_em.strftime('%d/%m/%Y') }}</dd>
+      </div>
+    </dl>
+
+    {% if transicoes %}
+    <div class="border-t border-surface-700 pt-4 mt-4 flex items-center justify-between">
+      <p class="text-xs text-slate-500">Alterar status:</p>
+      <div class="flex items-center gap-2">
+        {% for status in transicoes %}
+          <form method="POST" action="{{ url_for('orcamentos.mudar_status', id=orcamento.id) }}">
+            <input type="hidden" name="status" value="{{ status.value }}">
+            <button type="submit"
+              class="badge-{{ status.value }} text-xs px-3 py-1.5 rounded-lg font-500 hover:opacity-80 transition-opacity">
+              {{ status.value|capitalize }}
+            </button>
+          </form>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if orcamento.status.value == 'rascunho' %}
+    <div class="border-t border-surface-700 pt-4 mt-4 flex items-center justify-end">
+      <form method="POST" action="{{ url_for('orcamentos.excluir', id=orcamento.id) }}"
+            onsubmit="return confirm('Tem certeza que deseja excluir este orçamento?');">
+        <button type="submit" class="text-xs text-red-600 hover:text-red-700 transition-colors">Excluir orçamento</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Itens -->
+  <div class="bg-surface-900 border border-surface-700 rounded-xl overflow-hidden">
+    <div class="px-5 py-4 border-b border-surface-700">
+      <h2 class="text-sm font-500 text-slate-900">Itens</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-surface-700">
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Categoria</th>
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Descrição</th>
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Quantidade</th>
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Preço unitário</th>
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-700">
+          {% for item in orcamento.itens %}
+            <tr>
+              <td class="px-5 py-3 text-slate-500 text-xs">{{ item.categoria.nome }}</td>
+              <td class="px-5 py-3 text-slate-900 text-xs">{{ item.descricao }}</td>
+              <td class="px-5 py-3 text-slate-500 text-xs">{{ item.quantidade }}</td>
+              <td class="px-5 py-3 text-slate-500 text-xs">R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+              <td class="px-5 py-3 text-slate-900 text-xs font-500">R$ {{ "%.2f"|format(item.subtotal) }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr class="border-t border-surface-700">
+            <td colspan="4" class="px-5 py-3 text-right text-xs font-500 text-slate-500">Total</td>
+            <td class="px-5 py-3 text-sm font-600 text-slate-900">R$ {{ "%.2f"|format(orcamento.total) }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

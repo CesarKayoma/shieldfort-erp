@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{{ gasto.descricao }} — Shieldfort{% endblock %}
+
+{% block page_title %}{{ gasto.descricao }}{% endblock %}
+{% block page_subtitle %}Gasto #{{ gasto.id }}{% endblock %}
+
+{% block topbar_actions %}
+  <a href="{{ url_for('gastos.index') }}"
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
+    ← Voltar
+  </a>
+  <a href="{{ url_for('gastos.editar', id=gasto.id) }}"
+     class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-3 py-2 rounded-lg transition-colors">
+    Editar
+  </a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl space-y-6">
+
+  <div class="bg-surface-900 border border-surface-700 rounded-xl p-6">
+    <dl class="grid grid-cols-2 gap-4 text-sm">
+      <div class="col-span-2">
+        <dt class="text-xs text-slate-500 mb-1">Descrição</dt>
+        <dd class="text-slate-700">{{ gasto.descricao }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Quantidade</dt>
+        <dd class="text-slate-700">{{ gasto.quantidade }} {{ gasto.unidade_medida.sigla }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Valor unitário</dt>
+        <dd class="text-slate-700">R$ {{ "%.2f"|format(gasto.valor_unitario) }} / {{ gasto.unidade_medida.sigla }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Valor total</dt>
+        <dd class="text-slate-900 font-500">R$ {{ "%.2f"|format(gasto.valor_total) }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Forma de pagamento</dt>
+        <dd class="text-slate-700">{{ FORMA_PAGAMENTO_LABELS[gasto.forma_pagamento] }}</dd>
+      </div>
+    </dl>
+
+    <div class="border-t border-surface-700 pt-4 mt-4 flex items-center justify-between">
+      <p class="text-xs text-slate-500">{{ gasto.parcelas|length }} parcela(s)</p>
+      <form method="POST" action="{{ url_for('gastos.excluir', id=gasto.id) }}"
+            onsubmit="return confirm('Tem certeza que deseja excluir este gasto?');">
+        <button type="submit" class="text-xs text-red-600 hover:text-red-700 transition-colors">Excluir gasto</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Parcelas -->
+  <div class="bg-surface-900 border border-surface-700 rounded-xl overflow-hidden">
+    <div class="px-5 py-4 border-b border-surface-700">
+      <h2 class="text-sm font-500 text-slate-900">Parcelas</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-surface-700">
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Nº</th>
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Valor</th>
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Vencimento</th>
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Pagamento</th>
+            <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Status</th>
+            <th class="px-5 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-700">
+          {% for parcela in gasto.parcelas %}
+            <tr>
+              <td class="px-5 py-3 text-slate-700 text-xs">{{ parcela.numero }}/{{ gasto.parcelas|length }}</td>
+              <td class="px-5 py-3 text-slate-900 text-xs font-500">R$ {{ "%.2f"|format(parcela.valor) }}</td>
+              <td class="px-5 py-3 text-slate-500 text-xs">{{ parcela.data_vencimento.strftime('%d/%m/%Y') }}</td>
+              <td class="px-5 py-3 text-slate-500 text-xs">{{ parcela.data_pagamento.strftime('%d/%m/%Y') if parcela.data_pagamento else '—' }}</td>
+              <td class="px-5 py-3">
+                <span class="badge-{{ parcela.status.value }} text-xs px-2 py-0.5 rounded-full font-500">
+                  {{ parcela.status.value|capitalize }}
+                </span>
+              </td>
+              <td class="px-5 py-3 text-right">
+                {% if parcela.status.value != 'pago' %}
+                  <form method="POST" action="{{ url_for('gastos.pagar_parcela', id=gasto.id, parcela_id=parcela.id) }}">
+                    <button type="submit" class="text-xs text-brand-600 hover:text-brand-700 transition-colors">Marcar como paga</button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

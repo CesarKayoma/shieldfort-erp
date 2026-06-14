@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar gasto' if gasto else 'Novo gasto' }} — Shieldfort{% endblock %}
+
+{% block page_title %}{{ 'Editar gasto' if gasto else 'Novo gasto' }}{% endblock %}
+{% block page_subtitle %}{{ gasto.descricao if gasto else 'Cadastrar um novo gasto' }}{% endblock %}
+
+{% block topbar_actions %}
+  <a href="{{ url_for('gastos.index') }}"
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
+    ← Voltar
+  </a>
+{% endblock %}
+
+{% block content %}
+{% set input_class = "w-full bg-surface-950 border border-surface-700 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all" %}
+
+<div class="max-w-2xl bg-surface-900 border border-surface-700 rounded-xl p-6">
+  <form method="POST" class="space-y-4">
+    {{ form.hidden_tag() }}
+
+    <div>
+      <label class="block text-xs font-500 text-slate-500 mb-1.5">Descrição</label>
+      {{ form.descricao(class=input_class, placeholder="Ex: Material de instalação") }}
+      {% for error in form.descricao.errors %}
+        <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Quantidade</label>
+        {{ form.quantidade(class=input_class) }}
+        {% for error in form.quantidade.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Unidade de medida</label>
+        {{ form.unidade_medida_id(class=input_class) }}
+        {% for error in form.unidade_medida_id.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Valor unitário</label>
+        {{ form.valor_unitario(class=input_class, placeholder="0.00") }}
+        {% for error in form.valor_unitario.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Forma de pagamento</label>
+        {{ form.forma_pagamento(class=input_class, id="forma_pagamento") }}
+      </div>
+      <div id="campo-numero-parcelas">
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Número de parcelas</label>
+        {{ form.numero_parcelas(class=input_class) }}
+        {% for error in form.numero_parcelas.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-500 text-slate-500 mb-1.5">Vencimento da 1ª parcela</label>
+      {{ form.data_primeira_parcela(class=input_class) }}
+      {% for error in form.data_primeira_parcela.errors %}
+        <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div class="flex items-center justify-end gap-3 pt-2 border-t border-surface-700">
+      <a href="{{ url_for('gastos.index') }}" class="text-xs text-slate-500 hover:text-slate-900 px-4 py-2 transition-colors">Cancelar</a>
+      {{ form.submit(class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-4 py-2 rounded-lg transition-colors cursor-pointer") }}
+    </div>
+  </form>
+</div>
+
+<script>
+  // Número de parcelas só se aplica ao cartão de crédito; demais formas são sempre 1x.
+  const formaPagamento = document.getElementById("forma_pagamento");
+  const campoParcelas = document.getElementById("campo-numero-parcelas");
+
+  function atualizarCampoParcelas() {
+    const ehCartaoCredito = formaPagamento.value === "cartao_credito";
+    campoParcelas.style.display = ehCartaoCredito ? "" : "none";
+    if (!ehCartaoCredito) {
+      campoParcelas.querySelector("input").value = 1;
+    }
+  }
+
+  formaPagamento.addEventListener("change", atualizarCampoParcelas);
+  atualizarCampoParcelas();
+</script>
+{% endblock %}

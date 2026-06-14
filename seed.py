@@ -16,7 +16,12 @@ from app.models import (
     Produto,
     CategoriaProduto,
     UnidadeMedida,
-    User
+    User,
+    Servico,
+    Pagamento,
+    Parcela,
+    Gasto,
+    ParcelaGasto,
 )
 from app.models.orcamento import StatusOrcamento
 
@@ -24,6 +29,11 @@ app = create_app()
 
 with app.app_context():
     # 1. Limpa dados antigos (ordem INVERSA das dependencias, para nao violar FK)
+    ParcelaGasto.query.delete()
+    Gasto.query.delete()
+    Parcela.query.delete()
+    Pagamento.query.delete()
+    Servico.query.delete()
     User.query.delete()
     ItemOrcamento.query.delete()
     Orcamento.query.delete()
@@ -45,10 +55,11 @@ with app.app_context():
 
     # 2. Unidades de medida e categorias (sem dependencias)
     un = UnidadeMedida(sigla="UN", descricao="Unidade")
-    hr = UnidadeMedida(sigla="HR", descricao="Hora")
+    m = UnidadeMedida(sigla="M", descricao="Metro")
+    kg = UnidadeMedida(sigla="KG", descricao="Quilo")
     cat_pecas = CategoriaProduto(nome="Pecas")
     cat_servicos = CategoriaProduto(nome="Servicos")
-    db.session.add_all([un, hr, cat_pecas, cat_servicos])
+    db.session.add_all([un, m, kg, cat_pecas, cat_servicos])
     db.session.commit()
 
     # 3. Produtos (dependem de categoria + unidade de medida)
@@ -63,7 +74,7 @@ with app.app_context():
         nome="Revisao de 250h",
         descricao="Mao de obra de revisao programada",
         categoria_id=cat_servicos.id,
-        unidade_medida_id=hr.id,
+        unidade_medida_id=un.id,
         valor_padrao=Decimal("200.00"),
     )
     db.session.add_all([filtro, revisao])

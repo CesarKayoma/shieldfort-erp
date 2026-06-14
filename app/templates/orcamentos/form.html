@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar orçamento' if orcamento else 'Novo orçamento' }} — Shieldfort{% endblock %}
+
+{% block page_title %}{{ 'Editar orçamento' if orcamento else 'Novo orçamento' }}{% endblock %}
+{% block page_subtitle %}{{ ('Orçamento #' ~ orcamento.id) if orcamento else 'Cadastrar um novo orçamento' }}{% endblock %}
+
+{% block topbar_actions %}
+  <a href="{{ url_for('orcamentos.index') }}"
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
+    ← Voltar
+  </a>
+{% endblock %}
+
+{% block content %}
+{% set input_class = "w-full bg-surface-950 border border-surface-700 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all" %}
+{% set input_class_sm = "w-full bg-surface-950 border border-surface-700 rounded-lg px-2 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all" %}
+
+<div class="max-w-4xl space-y-6">
+  <form method="POST" id="orcamento-form" class="space-y-6">
+    {{ form.hidden_tag() }}
+
+    <div class="bg-surface-900 border border-surface-700 rounded-xl p-6">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-500 text-slate-500 mb-1.5">Cliente</label>
+          {{ form.cliente_id(class=input_class) }}
+          {% for error in form.cliente_id.errors %}
+            <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="flex items-center pt-6">
+          <label class="flex items-center gap-2 text-sm text-slate-700">
+            {{ form.ativo() }}
+            Ativo
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Itens -->
+    <div class="bg-surface-900 border border-surface-700 rounded-xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-surface-700 flex items-center justify-between">
+        <h2 class="text-sm font-500 text-slate-900">Itens do orçamento</h2>
+        <button type="button" id="btn-add-item"
+          class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-3 py-1.5 rounded-lg transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+          </svg>
+          Adicionar item
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-surface-700">
+              <th class="text-left px-5 py-3 text-xs font-500 text-slate-500 w-1/5">Categoria</th>
+              <th class="text-left px-5 py-3 text-xs font-500 text-slate-500 w-1/5">Produto</th>
+              <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Descrição</th>
+              <th class="text-left px-5 py-3 text-xs font-500 text-slate-500 w-24">Qtd.</th>
+              <th class="text-left px-5 py-3 text-xs font-500 text-slate-500 w-32">Preço unit.</th>
+              <th class="text-left px-5 py-3 text-xs font-500 text-slate-500 w-32">Subtotal</th>
+              <th class="px-5 py-3 w-10"></th>
+            </tr>
+          </thead>
+          <tbody id="itens-tbody" class="divide-y divide-surface-700"></tbody>
+          <tfoot>
+            <tr class="border-t border-surface-700">
+              <td colspan="5" class="px-5 py-3 text-right text-xs font-500 text-slate-500">Total</td>
+              <td class="px-5 py-3 text-sm font-600 text-slate-900" id="total-orcamento">R$ 0,00</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-3 pt-2">
+      <a href="{{ url_for('orcamentos.index') }}" class="text-xs text-slate-500 hover:text-slate-900 px-4 py-2 transition-colors">Cancelar</a>
+      {{ form.submit(class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-4 py-2 rounded-lg transition-colors cursor-pointer") }}
+    </div>
+  </form>
+</div>
+
+<template id="item-row-template">
+  <tr class="item-row">
+    <td class="px-5 py-3">
+      <select name="item_categoria_id" class="categoria-select"></select>
+    </td>
+    <td class="px-5 py-3">
+      <select name="item_produto_id" class="produto-select"></select>
+    </td>
+    <td class="px-5 py-3">
+      <input type="text" name="item_descricao" class="descricao-input" />
+    </td>
+    <td class="px-5 py-3">
+      <input type="number" step="0.01" min="0.01" name="item_quantidade" value="1.00" class="quantidade-input" />
+    </td>
+    <td class="px-5 py-3">
+      <input type="number" step="0.01" min="0" name="item_preco_unitario" value="0.00" class="preco-input" />
+    </td>
+    <td class="px-5 py-3 subtotal-cell text-xs text-slate-900 font-500">R$ 0,00</td>
+    <td class="px-5 py-3">
+      <button type="button" class="btn-remove-item text-slate-500 hover:text-red-600 transition-colors" title="Remover">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </td>
+  </tr>
+</template>
+
+<script>
+  const PRODUTOS = {{ produtos | tojson }};
+  const CATEGORIAS = {{ categorias | tojson }};
+  const ITENS_EXISTENTES = {{ itens_existentes | tojson }};
+
+  const INPUT_CLASS_SM = "{{ input_class_sm }}";
+  const tbody = document.getElementById("itens-tbody");
+  const template = document.getElementById("item-row-template");
+
+  function formatarMoeda(valor) {
+    return "R$ " + valor.toFixed(2).replace(".", ",");
+  }
+
+  function recalcularTotal() {
+    let total = 0;
+    tbody.querySelectorAll(".item-row").forEach((row) => {
+      const quantidade = parseFloat(row.querySelector(".quantidade-input").value) || 0;
+      const preco = parseFloat(row.querySelector(".preco-input").value) || 0;
+      const subtotal = quantidade * preco;
+      row.querySelector(".subtotal-cell").textContent = formatarMoeda(subtotal);
+      total += subtotal;
+    });
+    document.getElementById("total-orcamento").textContent = formatarMoeda(total);
+  }
+
+  function preencherSelects(row) {
+    const categoriaSelect = row.querySelector(".categoria-select");
+    const produtoSelect = row.querySelector(".produto-select");
+
+    categoriaSelect.innerHTML = "";
+    CATEGORIAS.forEach((c) => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.textContent = c.nome;
+      categoriaSelect.appendChild(opt);
+    });
+
+    produtoSelect.innerHTML = "";
+    const optVazia = document.createElement("option");
+    optVazia.value = "";
+    optVazia.textContent = "— selecione —";
+    produtoSelect.appendChild(optVazia);
+    PRODUTOS.forEach((p) => {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = p.nome;
+      opt.dataset.categoriaId = p.categoria_id;
+      opt.dataset.descricao = p.descricao || p.nome;
+      opt.dataset.valorPadrao = p.valor_padrao;
+      produtoSelect.appendChild(opt);
+    });
+  }
+
+  function adicionarLinha(dados) {
+    const fragment = template.content.cloneNode(true);
+    const row = fragment.querySelector(".item-row");
+
+    row.querySelectorAll("select, input").forEach((el) => {
+      el.className += " " + INPUT_CLASS_SM;
+    });
+
+    preencherSelects(row);
+
+    const categoriaSelect = row.querySelector(".categoria-select");
+    const produtoSelect = row.querySelector(".produto-select");
+    const descricaoInput = row.querySelector(".descricao-input");
+    const quantidadeInput = row.querySelector(".quantidade-input");
+    const precoInput = row.querySelector(".preco-input");
+
+    produtoSelect.addEventListener("change", () => {
+      const opt = produtoSelect.selectedOptions[0];
+      if (opt && opt.value) {
+        descricaoInput.value = opt.dataset.descricao;
+        precoInput.value = parseFloat(opt.dataset.valorPadrao).toFixed(2);
+        if (opt.dataset.categoriaId) {
+          categoriaSelect.value = opt.dataset.categoriaId;
+        }
+        recalcularTotal();
+      }
+    });
+
+    [quantidadeInput, precoInput].forEach((el) => el.addEventListener("input", recalcularTotal));
+
+    row.querySelector(".btn-remove-item").addEventListener("click", () => {
+      row.remove();
+      recalcularTotal();
+    });
+
+    if (dados) {
+      categoriaSelect.value = dados.categoria_id;
+      produtoSelect.value = dados.produto_id;
+      descricaoInput.value = dados.descricao;
+      quantidadeInput.value = parseFloat(dados.quantidade).toFixed(2);
+      precoInput.value = parseFloat(dados.preco_unitario).toFixed(2);
+    }
+
+    tbody.appendChild(row);
+    recalcularTotal();
+  }
+
+  document.getElementById("btn-add-item").addEventListener("click", () => adicionarLinha());
+
+  if (ITENS_EXISTENTES.length) {
+    ITENS_EXISTENTES.forEach((item) => adicionarLinha(item));
+  } else {
+    adicionarLinha();
+  }
+</script>
+{% endblock %}

@@ -38,4 +38,10 @@ def create_app(config_name="default"):
     app.register_blueprint(gastos_bp, url_prefix="/gastos")
     app.register_blueprint(auth_bp)
 
+    from app.models.pagamento import FORMA_PAGAMENTO_LABELS
+
+    @app.context_processor
+    def inject_forma_pagamento_labels():
+        return {"FORMA_PAGAMENTO_LABELS": FORMA_PAGAMENTO_LABELS}
+
     return app

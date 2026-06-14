@@ -19,6 +19,16 @@ class StatusParcela(enum.Enum):
     ATRASADO = "atrasado"
 
 
+FORMA_PAGAMENTO_LABELS = {
+    FormaPagamento.PIX: "PIX",
+    FormaPagamento.CARTAO_CREDITO: "Cartão de Crédito",
+    FormaPagamento.CARTAO_DEBITO: "Cartão de Débito",
+    FormaPagamento.BOLETO: "Boleto",
+    FormaPagamento.DINHEIRO: "Dinheiro",
+    FormaPagamento.TRANSFERENCIA: "Transferência",
+}
+
+
 class Pagamento(BaseModel):
     __tablename__ = "pagamentos"
 

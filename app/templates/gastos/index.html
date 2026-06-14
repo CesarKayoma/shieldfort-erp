@@ -1,34 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}Orçamentos — Shieldfort{% endblock %}
+{% block title %}Gastos — Shieldfort{% endblock %}
 
-{% block page_title %}Orçamentos{% endblock %}
-{% block page_subtitle %}{{ total }} orçamentos cadastrados{% endblock %}
+{% block page_title %}Gastos{% endblock %}
+{% block page_subtitle %}{{ total }} gastos cadastrados{% endblock %}
 
 {% block topbar_actions %}
-  <a href="{{ url_for('orcamentos.novo') }}"
+  <a href="{{ url_for('gastos.novo') }}"
      class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-3 py-2 rounded-lg transition-colors">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
     </svg>
-    Novo orçamento
+    Novo gasto
   </a>
 {% endblock %}
 
 {% block content %}
 
-<!-- Filtro de status -->
+<!-- Search -->
 <div class="flex items-center gap-3 mb-5">
-  <form method="GET" class="flex items-center gap-2">
-    <select name="status" onchange="this.form.submit()"
-      class="bg-surface-900 border border-surface-700 rounded-lg px-3 py-2 text-sm text-slate-900
-             focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all">
-      <option value="" {% if not request.args.get('status') %}selected{% endif %}>Todos os status</option>
-      <option value="rascunho" {% if request.args.get('status') == 'rascunho' %}selected{% endif %}>Rascunho</option>
-      <option value="enviado" {% if request.args.get('status') == 'enviado' %}selected{% endif %}>Enviado</option>
-      <option value="aprovado" {% if request.args.get('status') == 'aprovado' %}selected{% endif %}>Aprovado</option>
-      <option value="recusado" {% if request.args.get('status') == 'recusado' %}selected{% endif %}>Recusado</option>
-    </select>
+  <form method="GET" class="flex-1 max-w-xs relative">
+    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+    </svg>
+    <input type="search" name="q" value="{{ request.args.get('q', '') }}"
+      placeholder="Descrição…"
+      class="w-full bg-surface-900 border border-surface-700 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-900 placeholder-slate-400
+             focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all" />
   </form>
 </div>
 
@@ -38,47 +36,41 @@
     <table class="w-full text-sm">
       <thead>
         <tr class="border-b border-surface-700">
-          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">#</th>
-          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Cliente</th>
-          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Itens</th>
-          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Total</th>
-          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Status</th>
-          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Criado em</th>
+          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Descrição</th>
+          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Quantidade</th>
+          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Valor unitário</th>
+          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Valor total</th>
+          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Pagamento</th>
+          <th class="text-left px-5 py-3 text-xs font-500 text-slate-500">Parcelas</th>
           <th class="px-5 py-3"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-surface-700">
-        {% for o in orcamentos %}
+        {% for g in gastos %}
           <tr class="transition-colors">
-            <td class="px-5 py-3 text-slate-500 text-xs">#{{ o.id }}</td>
-            <td class="px-5 py-3 text-slate-900 text-xs font-500">{{ o.cliente.nome }}</td>
-            <td class="px-5 py-3 text-slate-500 text-xs">{{ o.itens|length }}</td>
-            <td class="px-5 py-3 text-slate-900 text-xs font-500">R$ {{ "%.2f"|format(o.total) }}</td>
-            <td class="px-5 py-3">
-              <span class="badge-{{ o.status.value }} text-xs px-2 py-0.5 rounded-full font-500">
-                {{ o.status.value|capitalize }}
-              </span>
-            </td>
-            <td class="px-5 py-3 text-slate-500 text-xs">{{ o.criado_em.strftime('%d/%m/%Y') }}</td>
+            <td class="px-5 py-3 text-slate-900 text-xs">{{ g.descricao }}</td>
+            <td class="px-5 py-3 text-slate-500 text-xs">{{ g.quantidade }} {{ g.unidade_medida.sigla }}</td>
+            <td class="px-5 py-3 text-slate-500 text-xs">R$ {{ "%.2f"|format(g.valor_unitario) }}</td>
+            <td class="px-5 py-3 text-slate-900 text-xs font-500">R$ {{ "%.2f"|format(g.valor_total) }}</td>
+            <td class="px-5 py-3 text-slate-500 text-xs">{{ FORMA_PAGAMENTO_LABELS[g.forma_pagamento] }}</td>
+            <td class="px-5 py-3 text-slate-500 text-xs">{{ g.parcelas|length }}x</td>
             <td class="px-5 py-3">
               <div class="flex items-center gap-2 justify-end">
-                <a href="{{ url_for('orcamentos.show', id=o.id) }}"
+                <a href="{{ url_for('gastos.show', id=g.id) }}"
                    class="text-slate-500 hover:text-brand-600 transition-colors" title="Ver">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                   </svg>
                 </a>
-                {% if o.status.value == 'rascunho' %}
-                <a href="{{ url_for('orcamentos.editar', id=o.id) }}"
+                <a href="{{ url_for('gastos.editar', id=g.id) }}"
                    class="text-slate-500 hover:text-brand-600 transition-colors" title="Editar">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
                   </svg>
                 </a>
-                {% endif %}
-                <form method="POST" action="{{ url_for('orcamentos.excluir', id=o.id) }}"
-                      onsubmit="return confirm('Tem certeza que deseja excluir este orçamento?');">
+                <form method="POST" action="{{ url_for('gastos.excluir', id=g.id) }}"
+                      onsubmit="return confirm('Tem certeza que deseja excluir este gasto?');">
                   <button type="submit" class="text-slate-500 hover:text-red-600 transition-colors" title="Excluir">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
@@ -91,8 +83,8 @@
         {% else %}
           <tr>
             <td colspan="7" class="px-5 py-12 text-center text-xs text-slate-400">
-              Nenhum orçamento encontrado.
-              <a href="{{ url_for('orcamentos.novo') }}" class="text-brand-600 hover:underline ml-1">Cadastrar primeiro orçamento →</a>
+              Nenhum gasto encontrado.
+              <a href="{{ url_for('gastos.novo') }}" class="text-brand-600 hover:underline ml-1">Cadastrar primeiro gasto →</a>
             </td>
           </tr>
         {% endfor %}
@@ -108,12 +100,12 @@
     </p>
     <div class="flex items-center gap-1">
       {% if pagination.has_prev %}
-        <a href="{{ url_for('orcamentos.index', page=pagination.prev_num, status=request.args.get('status','')) }}"
+        <a href="{{ url_for('gastos.index', page=pagination.prev_num, q=request.args.get('q','')) }}"
            class="px-3 py-1.5 text-xs text-slate-500 hover:text-slate-900 bg-surface-800 rounded-lg border border-surface-700 hover:border-surface-600 transition-all">← Anterior</a>
       {% endif %}
       {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=1) %}
         {% if p %}
-          <a href="{{ url_for('orcamentos.index', page=p, status=request.args.get('status','')) }}"
+          <a href="{{ url_for('gastos.index', page=p, q=request.args.get('q','')) }}"
              class="px-3 py-1.5 text-xs rounded-lg border transition-all
              {% if p == pagination.page %}bg-brand-600 border-brand-600 text-white{% else %}text-slate-500 hover:text-slate-900 bg-surface-800 border-surface-700 hover:border-surface-600{% endif %}">
             {{ p }}
@@ -123,7 +115,7 @@
         {% endif %}
       {% endfor %}
       {% if pagination.has_next %}
-        <a href="{{ url_for('orcamentos.index', page=pagination.next_num, status=request.args.get('status','')) }}"
+        <a href="{{ url_for('gastos.index', page=pagination.next_num, q=request.args.get('q','')) }}"
            class="px-3 py-1.5 text-xs text-slate-500 hover:text-slate-900 bg-surface-800 rounded-lg border border-surface-700 hover:border-surface-600 transition-all">Próximo →</a>
       {% endif %}
     </div>

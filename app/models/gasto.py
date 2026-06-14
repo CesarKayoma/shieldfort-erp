@@ -9,6 +9,7 @@ class Gasto(BaseModel):
 
     descricao = db.Column(db.String(255), nullable=False)
     quantidade = db.Column(db.Numeric(10, 2), nullable=False, default=Decimal("1.00"))
+    unidade_medida_id = db.Column(db.Integer, db.ForeignKey("unidades_medidas.id"), nullable=False, index=True)
     valor_unitario = db.Column(db.Numeric(10, 2), nullable=False, default=Decimal("0.00"))
     forma_pagamento = db.Column(
         db.Enum(
@@ -18,6 +19,8 @@ class Gasto(BaseModel):
         ),
         nullable=False,
     )
+
+    unidade_medida = db.relationship("UnidadeMedida")
 
     parcelas = db.relationship(
         "ParcelaGasto",
