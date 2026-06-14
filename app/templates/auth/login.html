@@ -90,10 +90,8 @@
 
         <!-- Brand side -->
         <div class="w-28 bg-brand-600 flex flex-col items-center justify-center gap-3 p-4">
-          <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 003 10c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.249-8.25-3.286z"/>
-            </svg>
+          <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden">
+            <img src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="Shieldfort" class="w-full h-full object-contain">
           </div>
           <span class="font-display text-xs font-700 text-white text-center leading-tight">SHIELD<br>FORT</span>
         </div>
