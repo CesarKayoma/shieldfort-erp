@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ produto.nome }} — Shieldfort{% endblock %}
+
+{% block page_title %}{{ produto.nome }}{% endblock %}
+{% block page_subtitle %}Produto #{{ produto.id }}{% endblock %}
+
+{% block topbar_actions %}
+  <a href="{{ url_for('produtos.index') }}"
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
+    ← Voltar
+  </a>
+  <a href="{{ url_for('produtos.editar', id=produto.id) }}"
+     class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-3 py-2 rounded-lg transition-colors">
+    Editar
+  </a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl bg-surface-900 border border-surface-700 rounded-xl p-6 space-y-6">
+
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-slate-900 font-600">{{ produto.nome }}</h2>
+      <p class="text-xs text-slate-500 mt-1">{{ produto.descricao }}</p>
+    </div>
+    <span class="badge-{{ 'ativo' if produto.ativo else 'inativo' }} text-xs px-2 py-0.5 rounded-full font-500">
+      {{ 'Ativo' if produto.ativo else 'Inativo' }}
+    </span>
+  </div>
+
+  <dl class="grid grid-cols-2 gap-4 text-sm">
+    <div>
+      <dt class="text-xs text-slate-500 mb-1">Categoria</dt>
+      <dd class="text-slate-700">{{ produto.categoria.nome }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs text-slate-500 mb-1">Unidade de medida</dt>
+      <dd class="text-slate-700">{{ produto.unidade_medida.sigla }} — {{ produto.unidade_medida.descricao }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs text-slate-500 mb-1">Valor padrão</dt>
+      <dd class="text-slate-900 font-500">R$ {{ "%.2f"|format(produto.valor_padrao or 0) }}</dd>
+    </div>
+  </dl>
+
+  <div class="border-t border-surface-700 pt-4 flex items-center justify-end">
+    <form method="POST" action="{{ url_for('produtos.excluir', id=produto.id) }}"
+          onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+      <button type="submit" class="text-xs text-red-600 hover:text-red-700 transition-colors">Excluir produto</button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

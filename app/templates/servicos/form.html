@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar serviço' if servico else 'Novo serviço' }} — Shieldfort{% endblock %}
+
+{% block page_title %}{{ 'Editar serviço' if servico else 'Novo serviço' }}{% endblock %}
+{% block page_subtitle %}{{ ('Serviço #' ~ servico.id) if servico else 'Cadastrar um novo serviço' }}{% endblock %}
+
+{% block topbar_actions %}
+  <a href="{{ url_for('servicos.index') }}"
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
+    ← Voltar
+  </a>
+{% endblock %}
+
+{% block content %}
+{% set input_class = "w-full bg-surface-950 border border-surface-700 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all" %}
+
+<div class="max-w-2xl bg-surface-900 border border-surface-700 rounded-xl p-6">
+  <form method="POST" class="space-y-4">
+    {{ form.hidden_tag() }}
+
+    <div>
+      <label class="block text-xs font-500 text-slate-500 mb-1.5">Orçamento</label>
+      {{ form.orcamento_id(class=input_class) }}
+      {% for error in form.orcamento_id.errors %}
+        <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+      {% endfor %}
+      {% if not form.orcamento_id.choices %}
+        <p class="text-xs text-slate-500 mt-1">Não há orçamentos aprovados disponíveis para vincular a um serviço.</p>
+      {% endif %}
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Status</label>
+        {{ form.status(class=input_class) }}
+        {% for error in form.status.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Data de execução</label>
+        {{ form.data_execucao(class=input_class) }}
+        {% for error in form.data_execucao.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-500 text-slate-500 mb-1.5">Observações</label>
+      {{ form.observacoes(class=input_class, placeholder="Observações sobre o serviço") }}
+      {% for error in form.observacoes.errors %}
+        <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <label class="flex items-center gap-2 cursor-pointer">
+      {{ form.ativo(class="w-4 h-4 rounded border-surface-700 bg-surface-950 text-brand-600 focus:ring-brand-500/30") }}
+      <span class="text-xs text-slate-500">Serviço ativo</span>
+    </label>
+
+    <div class="pt-2 border-t border-surface-700">
+      <h2 class="text-sm font-500 text-slate-900 mb-3">Pagamento</h2>
+
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-xs font-500 text-slate-500 mb-1.5">Valor do serviço</label>
+          {{ form.valor_servico(class=input_class, placeholder="0.00") }}
+          {% for error in form.valor_servico.errors %}
+            <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs font-500 text-slate-500 mb-1.5">Forma de pagamento</label>
+          {{ form.forma_pagamento(class=input_class, id="forma_pagamento") }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div id="campo-numero-parcelas">
+          <label class="block text-xs font-500 text-slate-500 mb-1.5">Número de parcelas</label>
+          {{ form.numero_parcelas(class=input_class) }}
+          {% for error in form.numero_parcelas.errors %}
+            <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs font-500 text-slate-500 mb-1.5">Vencimento da 1ª parcela</label>
+          {{ form.data_primeira_parcela(class=input_class) }}
+          {% for error in form.data_primeira_parcela.errors %}
+            <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-3 pt-2 border-t border-surface-700">
+      <a href="{{ url_for('servicos.index') }}" class="text-xs text-slate-500 hover:text-slate-900 px-4 py-2 transition-colors">Cancelar</a>
+      {{ form.submit(class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-4 py-2 rounded-lg transition-colors cursor-pointer") }}
+    </div>
+  </form>
+</div>
+
+<script>
+  // Número de parcelas só se aplica ao cartão de crédito; demais formas são sempre 1x.
+  const formaPagamento = document.getElementById("forma_pagamento");
+  const campoParcelas = document.getElementById("campo-numero-parcelas");
+
+  function atualizarCampoParcelas() {
+    const ehCartaoCredito = formaPagamento.value === "cartao_credito";
+    campoParcelas.style.display = ehCartaoCredito ? "" : "none";
+    if (!ehCartaoCredito) {
+      campoParcelas.querySelector("input").value = 1;
+    }
+  }
+
+  formaPagamento.addEventListener("change", atualizarCampoParcelas);
+  atualizarCampoParcelas();
+</script>
+{% endblock %}

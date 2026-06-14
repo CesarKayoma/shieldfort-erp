@@ -1,9 +1,7 @@
-import calendar
-from decimal import Decimal, ROUND_HALF_UP
-
 from app.extensions import db
 from app.models import Gasto, ParcelaGasto
 from app.models.pagamento import FormaPagamento, StatusParcela
+from app.services.parcelamento import gerar_parcelas
 
 PER_PAGE = 10
 
@@ -51,6 +49,12 @@ def marcar_parcela_paga(parcela, data_pagamento):
     db.session.commit()
 
 
+def desmarcar_parcela_paga(parcela):
+    parcela.status = StatusParcela.PENDENTE
+    parcela.data_pagamento = None
+    db.session.commit()
+
+
 def _aplicar_form(gasto, form):
     gasto.descricao = form.descricao.data.strip()
     gasto.quantidade = form.quantidade.data
@@ -60,31 +64,12 @@ def _aplicar_form(gasto, form):
 
 
 def _gerar_parcelas(gasto, form):
-    numero_parcelas = form.numero_parcelas.data if gasto.forma_pagamento == FormaPagamento.CARTAO_CREDITO else 1
-    valor_total = gasto.valor_total
-    valor_parcela = (valor_total / numero_parcelas).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    soma_parcelas_anteriores = valor_parcela * (numero_parcelas - 1)
-    data_vencimento = form.data_primeira_parcela.data
-
-    for numero in range(1, numero_parcelas + 1):
-        valor = valor_parcela if numero < numero_parcelas else (valor_total - soma_parcelas_anteriores)
-        gasto.parcelas.append(
-            ParcelaGasto(
-                numero=numero,
-                valor=valor,
-                data_vencimento=_somar_meses(data_vencimento, numero - 1),
-                status=StatusParcela.PENDENTE,
-            )
+    gasto.parcelas.extend(
+        gerar_parcelas(
+            ParcelaGasto,
+            gasto.forma_pagamento,
+            gasto.valor_total,
+            form.numero_parcelas.data,
+            form.data_primeira_parcela.data,
         )
-
-
-def _somar_meses(data, meses):
-    mes_total = data.month - 1 + meses
-    ano = data.year + mes_total // 12
-    mes = mes_total % 12 + 1
-    dia = min(data.day, _ultimo_dia_do_mes(ano, mes))
-    return data.replace(year=ano, month=mes, day=dia)
-
-
-def _ultimo_dia_do_mes(ano, mes):
-    return calendar.monthrange(ano, mes)[1]
+    )

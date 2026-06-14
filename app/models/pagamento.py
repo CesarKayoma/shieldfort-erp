@@ -1,6 +1,7 @@
 from app.extensions import db
 from app.models.base import BaseModel
 import enum
+from datetime import date
 from decimal import Decimal
 
 
@@ -76,6 +77,10 @@ class Parcela(BaseModel):
         nullable=False,
         default=StatusParcela.PENDENTE,
     )
+
+    @property
+    def esta_atrasada(self):
+        return self.status == StatusParcela.PENDENTE and self.data_vencimento < date.today()
 
     def __repr__(self):
         return f"<Parcela {self.numero} - {self.status.value}>"

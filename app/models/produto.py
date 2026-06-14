@@ -13,6 +13,12 @@ class Produto(BaseModel):
     ativo = db.Column(db.Boolean, default=True)
     valor_padrao =  db.Column(db.Numeric(10, 2))
 
+    categoria = db.relationship("CategoriaProduto")
+    unidade_medida = db.relationship("UnidadeMedida")
+
+    def __repr__(self):
+        return f"<Produto {self.nome}>"
+
 
 class CategoriaProduto(BaseModel):
     __tablename__ = "categorias_produtos"

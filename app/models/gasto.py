@@ -1,6 +1,7 @@
 from app.extensions import db
 from app.models.base import BaseModel
 from app.models.pagamento import FormaPagamento, StatusParcela
+from datetime import date
 from decimal import Decimal
 
 
@@ -55,6 +56,10 @@ class ParcelaGasto(BaseModel):
         nullable=False,
         default=StatusParcela.PENDENTE,
     )
+
+    @property
+    def esta_atrasada(self):
+        return self.status == StatusParcela.PENDENTE and self.data_vencimento < date.today()
 
     def __repr__(self):
         return f"<ParcelaGasto {self.numero} - {self.status.value}>"

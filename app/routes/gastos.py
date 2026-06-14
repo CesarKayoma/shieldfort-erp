@@ -77,3 +77,12 @@ def pagar_parcela(id, parcela_id):
     gasto_service.marcar_parcela_paga(parcela, datetime.now(timezone.utc).date())
     flash("Parcela marcada como paga.", "success")
     return redirect(url_for("gastos.show", id=id))
+
+
+@bp.route("/<int:id>/parcelas/<int:parcela_id>/desfazer", methods=["POST"])
+@login_required
+def desfazer_parcela(id, parcela_id):
+    parcela = ParcelaGasto.query.filter_by(id=parcela_id, gasto_id=id).first_or_404()
+    gasto_service.desmarcar_parcela_paga(parcela)
+    flash("Parcela marcada como pendente.", "success")
+    return redirect(url_for("gastos.show", id=id))

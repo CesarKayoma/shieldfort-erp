@@ -10,6 +10,14 @@ class StatusServico(enum.Enum):
     CANCELADO = "cancelado"
 
 
+STATUS_SERVICO_LABELS = {
+    StatusServico.AGENDADO: "Agendado",
+    StatusServico.EM_ANDAMENTO: "Em andamento",
+    StatusServico.CONCLUIDO: "Concluído",
+    StatusServico.CANCELADO: "Cancelado",
+}
+
+
 class Servico(BaseModel):
     __tablename__ = "servicos"
 

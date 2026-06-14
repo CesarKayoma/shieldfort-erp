@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Serviço #{{ servico.id }} — Shieldfort{% endblock %}
+
+{% block page_title %}Serviço #{{ servico.id }}{% endblock %}
+{% block page_subtitle %}{{ servico.cliente.nome }}{% endblock %}
+
+{% block topbar_actions %}
+  <a href="{{ url_for('servicos.index') }}"
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
+    ← Voltar
+  </a>
+  <a href="{{ url_for('servicos.editar', id=servico.id) }}"
+     class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-3 py-2 rounded-lg transition-colors">
+    Editar
+  </a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl space-y-6">
+
+  <div class="bg-surface-900 border border-surface-700 rounded-xl p-6">
+    <dl class="grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Cliente</dt>
+        <dd class="text-slate-700">{{ servico.cliente.nome }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Orçamento</dt>
+        <dd class="text-slate-700">
+          <a href="{{ url_for('orcamentos.show', id=servico.orcamento_id) }}" class="text-brand-600 hover:underline">#{{ servico.orcamento_id }}</a>
+          — R$ {{ "%.2f"|format(servico.orcamento.total) }}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Status</dt>
+        <dd>
+          <span class="badge-{{ servico.status.value }} text-xs px-2 py-0.5 rounded-full font-500">
+            {{ STATUS_SERVICO_LABELS[servico.status] }}
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Data de execução</dt>
+        <dd class="text-slate-700">{{ servico.data_execucao.strftime('%d/%m/%Y') if servico.data_execucao else '—' }}</dd>
+      </div>
+      <div class="col-span-2">
+        <dt class="text-xs text-slate-500 mb-1">Observações</dt>
+        <dd class="text-slate-700">{{ servico.observacoes or '—' }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Ativo</dt>
+        <dd class="text-slate-700">{{ "Sim" if servico.ativo else "Não" }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Valor do serviço</dt>
+        <dd class="text-slate-900 font-500">{{ "R$ %.2f"|format(servico.pagamento.valor_total) if servico.pagamento else "—" }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-slate-500 mb-1">Pagamento</dt>
+        <dd class="text-slate-700">
+          {% if servico.pagamento %}
+            <a href="{{ url_for('pagamentos.show', id=servico.pagamento.id) }}" class="text-brand-600 hover:underline">
+              {{ FORMA_PAGAMENTO_LABELS[servico.pagamento.forma_pagamento] }} — {{ "Quitado" if servico.pagamento.quitado else "Pendente" }}
+            </a>
+          {% else %}
+            Não registrado
+          {% endif %}
+        </dd>
+      </div>
+    </dl>
+
+    <div class="border-t border-surface-700 pt-4 mt-4 flex items-center justify-end">
+      <form method="POST" action="{{ url_for('servicos.excluir', id=servico.id) }}"
+            onsubmit="return confirm('Tem certeza que deseja excluir este serviço?');">
+        <button type="submit" class="text-xs text-red-600 hover:text-red-700 transition-colors">Excluir serviço</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

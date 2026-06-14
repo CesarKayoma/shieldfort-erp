@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar produto' if produto else 'Novo produto' }} — Shieldfort{% endblock %}
+
+{% block page_title %}{{ 'Editar produto' if produto else 'Novo produto' }}{% endblock %}
+{% block page_subtitle %}{{ produto.nome if produto else 'Cadastrar um novo produto' }}{% endblock %}
+
+{% block topbar_actions %}
+  <a href="{{ url_for('produtos.index') }}"
+     class="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-xs font-500 px-3 py-2 rounded-lg border border-surface-700 hover:border-surface-600 transition-colors">
+    ← Voltar
+  </a>
+{% endblock %}
+
+{% block content %}
+{% set input_class = "w-full bg-surface-950 border border-surface-700 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all" %}
+
+<div class="max-w-2xl bg-surface-900 border border-surface-700 rounded-xl p-6">
+  <form method="POST" class="space-y-4">
+    {{ form.hidden_tag() }}
+
+    <div>
+      <label class="block text-xs font-500 text-slate-500 mb-1.5">Nome</label>
+      {{ form.nome(class=input_class, placeholder="Ex: Filtro de óleo") }}
+      {% for error in form.nome.errors %}
+        <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <label class="block text-xs font-500 text-slate-500 mb-1.5">Descrição</label>
+      {{ form.descricao(class=input_class, placeholder="Descrição detalhada do produto ou serviço") }}
+      {% for error in form.descricao.errors %}
+        <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Categoria</label>
+        {{ form.categoria_id(class=input_class) }}
+        {% for error in form.categoria_id.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Unidade de medida</label>
+        {{ form.unidade_medida_id(class=input_class) }}
+        {% for error in form.unidade_medida_id.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+      <div>
+        <label class="block text-xs font-500 text-slate-500 mb-1.5">Valor padrão</label>
+        {{ form.valor_padrao(class=input_class, placeholder="0.00") }}
+        {% for error in form.valor_padrao.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <label class="flex items-center gap-2 cursor-pointer">
+      {{ form.ativo(class="w-4 h-4 rounded border-surface-700 bg-surface-950 text-brand-600 focus:ring-brand-500/30") }}
+      <span class="text-xs text-slate-500">Produto ativo</span>
+    </label>
+
+    <div class="flex items-center justify-end gap-3 pt-2 border-t border-surface-700">
+      <a href="{{ url_for('produtos.index') }}" class="text-xs text-slate-500 hover:text-slate-900 px-4 py-2 transition-colors">Cancelar</a>
+      {{ form.submit(class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-500 px-4 py-2 rounded-lg transition-colors cursor-pointer") }}
+    </div>
+  </form>
+</div>
+{% endblock %}

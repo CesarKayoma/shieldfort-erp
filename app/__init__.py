@@ -21,27 +21,29 @@ def create_app(config_name="default"):
     from app.routes.dashboard import bp as dashboard_bp
     from app.routes.clientes import bp as clientes_bp
     from app.routes.orcamentos import bp as orcamentos_bp
-    from app.routes.vendas import bp as vendas_bp
-    from app.routes.instalacoes import bp as instalacoes_bp
-    from app.routes.recorrentes import bp as recorrentes_bp
-    from app.routes.starlink import bp as starlink_bp
+    from app.routes.produtos import bp as produtos_bp
+    from app.routes.servicos import bp as servicos_bp
+    from app.routes.pagamentos import bp as pagamentos_bp
     from app.routes.gastos import bp as gastos_bp
     from app.routes.auth import bp as auth_bp
 
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(clientes_bp, url_prefix="/clientes")
     app.register_blueprint(orcamentos_bp, url_prefix="/orcamentos")
-    app.register_blueprint(vendas_bp, url_prefix="/vendas")
-    app.register_blueprint(instalacoes_bp, url_prefix="/instalacoes")
-    app.register_blueprint(recorrentes_bp, url_prefix="/recorrentes")
-    app.register_blueprint(starlink_bp, url_prefix="/starlink")
+    app.register_blueprint(produtos_bp, url_prefix="/produtos")
+    app.register_blueprint(servicos_bp, url_prefix="/servicos")
+    app.register_blueprint(pagamentos_bp, url_prefix="/pagamentos")
     app.register_blueprint(gastos_bp, url_prefix="/gastos")
     app.register_blueprint(auth_bp)
 
     from app.models.pagamento import FORMA_PAGAMENTO_LABELS
+    from app.models.servico import STATUS_SERVICO_LABELS
 
     @app.context_processor
     def inject_forma_pagamento_labels():
-        return {"FORMA_PAGAMENTO_LABELS": FORMA_PAGAMENTO_LABELS}
+        return {
+            "FORMA_PAGAMENTO_LABELS": FORMA_PAGAMENTO_LABELS,
+            "STATUS_SERVICO_LABELS": STATUS_SERVICO_LABELS,
+        }
 
     return app
