@@ -16,6 +16,7 @@ from app.models import (
     Produto,
     CategoriaProduto,
     UnidadeMedida,
+    User
 )
 from app.models.orcamento import StatusOrcamento
 
@@ -23,12 +24,23 @@ app = create_app()
 
 with app.app_context():
     # 1. Limpa dados antigos (ordem INVERSA das dependencias, para nao violar FK)
+    User.query.delete()
     ItemOrcamento.query.delete()
     Orcamento.query.delete()
     Produto.query.delete()
     Cliente.query.delete()
     CategoriaProduto.query.delete()
     UnidadeMedida.query.delete()
+    db.session.commit()
+
+    # 2. Usuario admin para desenvolvimento
+    admin = User(
+        nome="Admin",
+        email="admin@shieldfort.com",
+        ativo=True,
+    )
+    admin.set_senha("admin123")
+    db.session.add(admin)
     db.session.commit()
 
     # 2. Unidades de medida e categorias (sem dependencias)
@@ -106,4 +118,5 @@ with app.app_context():
     print(f"  {Cliente.query.count()} clientes")
     print(f"  {Orcamento.query.count()} orcamentos")
     print(f"  {ItemOrcamento.query.count()} itens de orcamento")
+    print(f"  {User.query.count()} usuarios")
     print(f"  Total do orcamento #{orcamento.id}: R$ {orcamento.total}")
