@@ -109,15 +109,3 @@ web: gunicorn "app:create_app('production')" --workers 2 --bind 0.0.0.0:$PORT
 ```
 
 Para isso, configure no serviço de hospedagem (ex.: Railway, Render) as variáveis `SECRET_KEY`, `DATABASE_URL` e `FLASK_ENV=production`, e execute `flask db upgrade` após o primeiro deploy para criar as tabelas.
-
----
-
-## Pendências da entrega (fora do escopo deste README)
-
-Os itens abaixo fazem parte dos requisitos da atividade de extensão, mas **não são conteúdo de README** — devem ser produzidos como artefatos separados:
-
-- **Documentação técnica completa** (mesmo trabalho entregue na disciplina de Modelagem de Sistemas): diagramas (casos de uso, modelo de dados/ER, etc.), especificação de requisitos e decisões de arquitetura. Deve ser um documento próprio (ex.: PDF ou pasta `docs/` no repositório), não o README.
-- **Material didático para a comunidade externa** (manual simplificado ou vídeo tutorial curto): conteúdo em linguagem não técnica, explicando o que o sistema faz e como usá-lo no dia a dia da Shieldfort. Deve ser produzido como um documento separado (ex.: `docs/manual-do-usuario.pdf`) ou um vídeo hospedado externamente, com o link incluído na entrega final.
-- **Slides do Pitch (até 10 min)**: apresentação cobrindo (1) a justificativa técnica dos paradigmas e tecnologias usados (ex.: arquitetura em camadas, Application Factory, ORM), (2) as principais funcionalidades do sistema e (3) o impacto social da solução para a Shieldfort e seus clientes. Deve ser um arquivo de slides separado (PowerPoint/Google Slides/PDF), não o README.
-
-Na entrega final, esses materiais devem ser reunidos junto com o link deste repositório, conforme as orientações da atividade.
