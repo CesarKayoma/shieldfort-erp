@@ -46,4 +46,8 @@ def create_app(config_name="default"):
             "STATUS_SERVICO_LABELS": STATUS_SERVICO_LABELS,
         }
 
+    from app.errors import register_error_handlers
+
+    register_error_handlers(app)
+
     return app

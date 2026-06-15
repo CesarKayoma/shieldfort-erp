@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Erro — Shieldfort{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['DM Sans', 'sans-serif'],
+            display: ['Syne', 'sans-serif'],
+          },
+          colors: {
+            surface: {
+              950: '#F7F9FC',
+              900: '#FFFFFF',
+              700: '#E2E8F0',
+            },
+            brand: {
+              600: '#115D91',
+              700: '#0D4870',
+            },
+          },
+          boxShadow: {
+            'glow': '0 0 20px rgba(17,93,145,0.25)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Syne', sans-serif; }
+  </style>
+</head>
+<body class="h-full bg-surface-950 text-slate-700 flex items-center justify-center min-h-screen">
+  <div class="text-center max-w-md px-6">
+    <img src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="Shieldfort" class="w-12 h-12 rounded-xl shadow-glow object-contain mx-auto mb-6">
+    <p class="font-display text-6xl font-700 text-brand-600 mb-2">{% block code %}{% endblock %}</p>
+    <h1 class="font-display text-xl font-700 text-slate-900 mb-2">{% block heading %}{% endblock %}</h1>
+    <p class="text-sm text-slate-500 mb-6">{% block message %}{% endblock %}</p>
+    <a href="{{ url_for('dashboard.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-brand-600 text-white text-sm font-500 hover:bg-brand-700 transition-colors">
+      Voltar ao início
+    </a>
+  </div>
+</body>
+</html>
